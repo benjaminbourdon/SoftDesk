@@ -10,7 +10,11 @@ class Project(models.Model):
         ANDROID = "AN", "Android"
 
     title = models.CharField(max_length=128, verbose_name="titre")
-    description = models.CharField(max_length=2048, verbose_name="description")
+    description = models.CharField(
+        max_length=2048,
+        blank=True,
+        verbose_name="description",
+    )
     type = models.CharField(
         max_length=2,
         choices=Plateforms.choices,
@@ -25,11 +29,19 @@ class Project(models.Model):
     def __str__(self):
         return f"#{self.id} - {self.title}"
 
+    def contributors_name(self):
+        # return [contribution.user.username for contribution in self.contributors.all()]
+        return self.contributors.values_list("user__username", flat=True)
+
     class Meta:
         verbose_name = "Projet"
 
 
 class Contributor(models.Model):
+    class Permission(models.IntegerChoices):
+        CONTRIBUTOR = 1, "Contributeur ou Contributrice"
+        AUTHOR = 9, "Auteur ou Autrice"
+
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -40,15 +52,14 @@ class Contributor(models.Model):
         on_delete=models.CASCADE,
         related_name="contributors",
     )
-    # permission = models.TextChoices()
-    # role = models.CharField()
+    permission = models.IntegerField(
+        choices=Permission.choices,
+        default=Permission.CONTRIBUTOR,
+    )
+    role = models.CharField(max_length=128, blank=True, null=True)
 
     def __str__(self):
         return f"{self.user} participe à {self.project.title}"
-
-    @property
-    def contributor_username(self):
-        return self.user.username
 
     class Meta:
         unique_together = (
@@ -100,6 +111,10 @@ class Issue(models.Model):
     )
     created_time = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def contributors(self):
+        return self.project.contributors.all()
+
 
 class Comment(models.Model):
     description = models.CharField(max_length=2048)
@@ -113,3 +128,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
     )
     created_time = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def contributors(self):
+        return self.issue.project.contributors.all()
