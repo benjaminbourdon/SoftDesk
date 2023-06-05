@@ -9,6 +9,8 @@ djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 
 [dev-packages]
+pyyaml = "*"
+uritemplate = "*"
 
 [requires]
 python_version = "3.11"
