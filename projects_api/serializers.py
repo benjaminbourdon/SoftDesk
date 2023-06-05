@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from projects_api.models import Project
+from projects_api.models import Project, Issue, Comment
 
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
@@ -35,3 +35,33 @@ class ProjectListSerializer(serializers.ModelSerializer):
             "title",
         ]
         read_only_fields = fields
+
+
+class IssuesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Issue
+        fields = [
+            "id",
+            "title",
+            "description",
+            "tag",
+            "priority",
+            "project",
+            "status",
+            "author",
+            "assignee",
+            "created_time",
+            "comment_set",
+        ]
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = [
+            "id",
+            "description",
+            "issue",
+            "author",
+            "created_time",
+        ]
