@@ -17,5 +17,15 @@ class ContributorAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(Issue)
-admin.site.register(Comment)
+@admin.register(Issue)
+class IssueAdmin(admin.ModelAdmin):
+    list_display = ("title", "author", "project", "tag", "priority")
+    list_filter = ("project", "author")
+    ordering = ["-created_time"]
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("id", "author", "issue")
+    list_filter = ("issue", "issue__project")
+    ordering = ["-created_time"]

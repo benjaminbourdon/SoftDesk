@@ -111,6 +111,12 @@ class Issue(models.Model):
     )
     created_time = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        title = self.title
+        if len(title) > 50:
+            title = title[:47] + "..."
+        return f'{title} (Projet "{self.project.title}")'
+
     @property
     def contributors(self):
         return self.project.contributors.all()
@@ -132,3 +138,6 @@ class Comment(models.Model):
     @property
     def contributors(self):
         return self.issue.project.contributors.all()
+
+    def __str__(self) -> str:
+        return f'Commentaire #{self.id} (Ticket "{self.issue.title}")'
