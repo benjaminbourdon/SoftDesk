@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from projects_api.models import Project, Issue, Comment
+from projects_api.models import Project, Issue, Comment, Contributor
 
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
@@ -65,3 +65,12 @@ class CommentSerializer(serializers.ModelSerializer):
             "author",
             "created_time",
         ]
+
+
+class ContributorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contributor
+        fields = ["user"]
+
+    def to_representation(self, instance):
+        return instance.user.username
