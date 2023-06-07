@@ -1,30 +1,39 @@
+from django.db import transaction
 from rest_framework import serializers
 
-from projects_api.models import Project, Issue, Comment, Contributor
+from projects_api.models import Comment, Contributor, Issue, Project
 
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
-    # class UserContributorSerializer(serializers.BaseSerializer):
-    #     def to_representation(self, instance):
-    #         return instance.user.username
+    class UserContributorSerializer(serializers.ModelSerializer):
+        def to_representation(self, instance):
+            return instance.user.id
 
-    # contributors = UserContributorSerializer(many=True)
-    # contributors = serializers.SlugRelatedField(
-    #     many=True, read_only=True, slug_field="contributor_username"
-    # )
-    contributors = serializers.ListField(read_only=True, source="contributors_name")
+    contributors_id = UserContributorSerializer(
+        source="contributors", many=True, read_only=True
+    )
+    author_user_id = UserContributorSerializer(source="author", read_only=True)
+    # author_user_id = serializers.PrimaryKeyRelatedField(source="author", read_only=True)
 
     class Meta:
         model = Project
         fields = [
-            "id",
             "title",
             "description",
             "type",
-            "contributors",
-            # "author_user_id",
+            "author_user_id",
+            "contributors_id",
         ]
-        read_only_fields = ["id", "contributors"]
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            instance = super().create(validated_data)
+            Contributor.objects.create(
+                project=instance,
+                user=self.context["request"].user,
+                permission=Contributor.Permission.AUTHOR,
+            )
+            return instance
 
 
 class ProjectListSerializer(serializers.ModelSerializer):
@@ -73,4 +82,7 @@ class ContributorSerializer(serializers.ModelSerializer):
         fields = ["user"]
 
     def to_representation(self, instance):
-        return instance.user.username
+        return {
+            "id": instance.user.id,
+            "username": instance.user.username,
+        }
