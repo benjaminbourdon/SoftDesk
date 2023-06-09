@@ -126,6 +126,7 @@ class Issue(models.Model):
 
     class Meta:
         ordering = ["created_time"]
+        verbose_name = "Problème"
 
 
 class Comment(models.Model):
@@ -150,3 +151,4 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ["created_time"]
+        verbose_name = "Commentaire"
