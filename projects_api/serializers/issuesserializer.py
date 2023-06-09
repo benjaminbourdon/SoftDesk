@@ -1,21 +1,26 @@
 from rest_framework import serializers
 
-from projects_api.models import Issue
+from projects_api.models import Issue, Project
 
 
 class IssuesSerializer(serializers.ModelSerializer):
+    project_id = serializers.PrimaryKeyRelatedField(
+        source="project", queryset=Project.objects
+    )
+    issue_id = serializers.IntegerField(source="id", read_only=True)
+
     class Meta:
         model = Issue
         fields = [
-            "id",
+            "issue_id",
             "title",
             "description",
+            "project_id",
             "tag",
             "priority",
-            "project",
             "status",
-            "author",
             "assignee",
+            "author",
             "created_time",
-            "comment_set",
         ]
+        read_only_fields = ["author"]
