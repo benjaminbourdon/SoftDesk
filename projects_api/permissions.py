@@ -23,12 +23,18 @@ class IsAuthorPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
         current_user = request.user
 
-        try:
-            contributor = obj.contributors.get(user=current_user)
-        except ObjectDoesNotExist:
+        if hasattr(obj, "author"):
+            if obj.author == current_user:
+                return True
+            else:
+                return False
+        else:
+            try:
+                contributor = obj.contributors.get(user=current_user)
+            except ObjectDoesNotExist:
+                return False
+
+            if contributor.permission >= Contributor.Permission.AUTHOR:
+                return True
+
             return False
-
-        if contributor.permission >= Contributor.Permission.AUTHOR:
-            return True
-
-        return False

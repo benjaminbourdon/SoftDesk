@@ -120,9 +120,9 @@ class Issue(models.Model):
             title = title[:47] + "..."
         return f'{title} (Projet "{self.project.title}")'
 
-    # @property
-    # def contributors(self):
-    #     return self.project.contributors.all()
+    @property
+    def contributors(self):
+        return self.project.contributors.all()
 
     class Meta:
         ordering = ["created_time"]
@@ -142,9 +142,9 @@ class Comment(models.Model):
     )
     created_time = models.DateTimeField(auto_now_add=True)
 
-    # @property
-    # def contributors(self):
-    #     return self.issue.project.contributors.all()
+    @property
+    def contributors(self):
+        return self.issue.project.contributors.all()
 
     def __str__(self) -> str:
         return f'Commentaire #{self.id} (Ticket "{self.issue.title}")'

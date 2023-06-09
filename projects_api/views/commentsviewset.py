@@ -4,11 +4,11 @@ from rest_framework.viewsets import ModelViewSet
 from projects_api.models import Comment
 from projects_api.pagination import ListSetPagination
 
-# from projects_api.permissions import IsContributorPermission
 from projects_api.serializers import CommentSerializer
+from projects_api.mixins import ProjectPartPermissionsMixin
 
 
-class CommentsViewSet(ModelViewSet):
+class CommentsViewSet(ProjectPartPermissionsMixin, ModelViewSet):
     serializer_class = CommentSerializer
 
     pagination_class = ListSetPagination
