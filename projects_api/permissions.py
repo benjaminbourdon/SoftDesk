@@ -24,17 +24,10 @@ class IsAuthorPermission(BasePermission):
         current_user = request.user
 
         if hasattr(obj, "author"):
-            if obj.author == current_user:
-                return True
-            else:
-                return False
-        else:
-            try:
-                contributor = obj.contributors.get(user=current_user)
-            except ObjectDoesNotExist:
-                return False
+            return obj.author == current_user
 
-            if contributor.permission >= Contributor.Permission.AUTHOR:
-                return True
-
+        try:
+            contributor = obj.contributors.get(user=current_user)
+        except ObjectDoesNotExist:
             return False
+        return contributor.permission >= Contributor.Permission.AUTHOR

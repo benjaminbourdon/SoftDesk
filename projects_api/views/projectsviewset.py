@@ -12,7 +12,6 @@ class ProjectViewset(ModelViewSet):
     list_serializers_class = ProjectListSerializer
 
     pagination_class = ListSetPagination
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return (
