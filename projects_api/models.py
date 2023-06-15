@@ -2,6 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from django.db import models
 
+from projects_api import choicesclass
+
 
 class Project(models.Model):
     class Plateforms(models.TextChoices):
@@ -40,10 +42,6 @@ class Project(models.Model):
 
 
 class Contributor(models.Model):
-    class Permission(models.IntegerChoices):
-        CONTRIBUTOR = 1, "Contributeur ou Contributrice"
-        AUTHOR = 9, "Auteur ou Autrice"
-
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -55,8 +53,8 @@ class Contributor(models.Model):
         related_name="contributors",
     )
     permission = models.IntegerField(
-        choices=Permission.choices,
-        default=Permission.CONTRIBUTOR,
+        choices=choicesclass.Permission.choices,
+        default=choicesclass.Permission.CONTRIBUTOR,
     )
     role = models.CharField(max_length=128, blank=True, null=True)
 

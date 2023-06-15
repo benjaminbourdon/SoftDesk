@@ -2,4 +2,6 @@ from .projectdetailserializer import ProjectDetailSerializer
 from .projectlistserializer import ProjectListSerializer
 from .issuesserializer import IssuesSerializer
 from .commentserializer import CommentSerializer
-from .contributorserializer import ContributorSerializer
+from .contributorlistserializer import ContributorListSerializer
+from .contributorcreateserializer import ContributorCreateSerializer
+from .permissionserializer import PermissionSerializer
