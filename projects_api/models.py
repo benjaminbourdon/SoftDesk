@@ -30,7 +30,7 @@ class Project(models.Model):
     @property
     def author(self):
         try:
-            author = self.contributors.get(permission=Contributor.Permission.AUTHOR)
+            author = self.contributors.get(permission=choicesclass.Permission.AUTHOR)
         except ObjectDoesNotExist:
             author = None
         finally:

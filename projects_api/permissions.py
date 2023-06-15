@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import BasePermission
 
-from projects_api.models import Contributor
+from projects_api.models import Contributor, choicesclass
 
 
 class IsContributorPermission(BasePermission):
@@ -13,7 +13,7 @@ class IsContributorPermission(BasePermission):
         except ObjectDoesNotExist:
             return False
 
-        if contributor.permission >= Contributor.Permission.CONTRIBUTOR:
+        if contributor.permission >= choicesclass.Permission.CONTRIBUTOR:
             return True
 
         return False

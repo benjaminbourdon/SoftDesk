@@ -1,7 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from projects_api.models import Project, Contributor
+from projects_api.models import Project, choicesclass
 from projects_api.pagination import ListSetPagination
 from projects_api.permissions import IsAuthorPermission, IsContributorPermission
 from projects_api.serializers import ProjectDetailSerializer, ProjectListSerializer
@@ -18,7 +18,7 @@ class ProjectViewset(ModelViewSet):
             Project.objects.prefetch_related("contributors__user")
             .filter(
                 contributors__user=self.request.user,
-                contributors__permission__gte=Contributor.Permission.CONTRIBUTOR,
+                contributors__permission__gte=choicesclass.Permission.CONTRIBUTOR,
             )
             .distinct()
         )

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from projects_api import choicesclass
+from projects_api.models import choicesclass
 
 
 class PermissionSerializer(serializers.ChoiceField):
