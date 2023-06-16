@@ -1,12 +1,12 @@
 from rest_framework.viewsets import ModelViewSet
 
-from projects_api.mixins import ProjectPartPermissionsMixin
+from projects_api.mixins import ProjectPartPermissionsMixin, NoPatchMixin
 from projects_api.models import Issue
 from projects_api.pagination import ListSetPagination
 from projects_api.serializers import IssuesSerializer
 
 
-class IssuesViewSet(ProjectPartPermissionsMixin, ModelViewSet):
+class IssuesViewSet(NoPatchMixin, ProjectPartPermissionsMixin, ModelViewSet):
     serializer_class = IssuesSerializer
     pagination_class = ListSetPagination
 

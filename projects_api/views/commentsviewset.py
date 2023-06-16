@@ -5,10 +5,10 @@ from projects_api.models import Comment
 from projects_api.pagination import ListSetPagination
 
 from projects_api.serializers import CommentSerializer
-from projects_api.mixins import ProjectPartPermissionsMixin
+from projects_api.mixins import ProjectPartPermissionsMixin, NoPatchMixin
 
 
-class CommentsViewSet(ProjectPartPermissionsMixin, ModelViewSet):
+class CommentsViewSet(NoPatchMixin, ProjectPartPermissionsMixin, ModelViewSet):
     serializer_class = CommentSerializer
 
     pagination_class = ListSetPagination

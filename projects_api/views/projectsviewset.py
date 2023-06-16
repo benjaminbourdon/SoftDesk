@@ -3,11 +3,16 @@ from rest_framework.viewsets import ModelViewSet
 
 from projects_api.models import Project, choicesclass
 from projects_api.pagination import ListSetPagination
-from projects_api.permissions import IsAuthorPermission, IsContributorPermission
+from projects_api.permissions import (
+    IsAuthorPermission,
+    IsContributorPermission,
+    ForbidAny,
+)
 from projects_api.serializers import ProjectDetailSerializer, ProjectListSerializer
+from projects_api.mixins import NoPatchMixin
 
 
-class ProjectViewset(ModelViewSet):
+class ProjectViewset(NoPatchMixin, ModelViewSet):
     serializer_class = ProjectDetailSerializer
     list_serializers_class = ProjectListSerializer
 
@@ -33,6 +38,8 @@ class ProjectViewset(ModelViewSet):
             self.permission_classes = [IsAuthenticated]
         elif self.action == "retrieve":
             self.permission_classes = [IsAuthenticated, IsContributorPermission]
+        elif self.action == "partial_update":
+            self.permission_classes = [ForbidAny]
         else:
             self.permission_classes = [IsAuthenticated, IsAuthorPermission]
         return super().get_permissions()
