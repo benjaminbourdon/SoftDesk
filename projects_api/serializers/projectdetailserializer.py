@@ -1,13 +1,19 @@
+from django.conf import settings
 from django.db import transaction
 from rest_framework import serializers
 
-from projects_api.models import Contributor, Project
+from projects_api.models import Contributor, Project, choicesclass
 
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
     class UserContributorSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = settings.AUTH_USER_MODEL
+            fields = ["id"]
+
         def to_representation(self, instance):
-            return instance.user.id
+            user = instance.user if isinstance(instance, Contributor) else instance
+            return user.id
 
     contributors_id = UserContributorSerializer(
         source="contributors", many=True, read_only=True
@@ -31,6 +37,6 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             Contributor.objects.create(
                 project=instance,
                 user=self.context["request"].user,
-                permission=Contributor.Permission.AUTHOR,
+                permission=choicesclass.Permission.AUTHOR,
             )
             return instance

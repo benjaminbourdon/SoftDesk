@@ -4,9 +4,7 @@ from projects_api.models import Issue, Project
 
 
 class IssuesSerializer(serializers.ModelSerializer):
-    project_id = serializers.PrimaryKeyRelatedField(
-        source="project", queryset=Project.objects
-    )
+    project_id = serializers.PrimaryKeyRelatedField(source="project", read_only=True)
     issue_id = serializers.IntegerField(source="id", read_only=True)
 
     class Meta:
@@ -23,4 +21,11 @@ class IssuesSerializer(serializers.ModelSerializer):
             "author",
             "created_time",
         ]
-        read_only_fields = ["author"]
+        read_only_fields = ["author", "project_id", "created_time"]
+
+    def create(self, validated_data):
+        project_id = self.context["view"].kwargs["project_pk"]
+        validated_data["project"] = Project.objects.get(id=project_id)
+        validated_data["author"] = self.context["request"].user
+        instance = super().create(validated_data)
+        return instance
