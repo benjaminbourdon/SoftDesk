@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
 from rest_framework.schemas import get_schema_view
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -31,7 +30,7 @@ urlpatterns = [
         name="swagger-ui",
     ),
     path(
-        "openapi",
+        "openapi/",
         get_schema_view(
             title="SoftDesk API",
             description="Interract with backend data of SoftDesk app.",
@@ -40,8 +39,4 @@ urlpatterns = [
         name="openapi-schema",
     ),
     path("api/", include("projects_api.urls")),
-    path("api/auth/", include("rest_framework.urls")),
-    path("api/login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/login/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    # path("signup", , name="signup"),
 ]

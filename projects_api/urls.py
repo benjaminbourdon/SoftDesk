@@ -20,6 +20,7 @@ issue_router = NestedSimpleRouter(project_router, "issues", lookup="issue")
 issue_router.register("comments", CommentsViewSet, basename="comments-issue-project")
 
 urlpatterns = [
+    path("auth/", include("projects_api.auth.urls")),
     path("", include(main_router.urls)),
     path("", include(project_router.urls)),
     path("", include(issue_router.urls)),
