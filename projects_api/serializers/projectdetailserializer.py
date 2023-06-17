@@ -1,4 +1,4 @@
-from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import serializers
 
@@ -8,7 +8,7 @@ from projects_api.models import Contributor, Project, choicesclass
 class ProjectDetailSerializer(serializers.ModelSerializer):
     class UserContributorSerializer(serializers.ModelSerializer):
         class Meta:
-            model = settings.AUTH_USER_MODEL
+            model = get_user_model()
             fields = ["id"]
 
         def to_representation(self, instance):
