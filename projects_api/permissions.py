@@ -4,6 +4,11 @@ from rest_framework.permissions import BasePermission
 from projects_api.models import Contributor, choicesclass
 
 
+class ForbidAny(BasePermission):
+    def has_permission(self, request, view):
+        return False
+
+
 class IsContributorPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
         current_user = request.user
