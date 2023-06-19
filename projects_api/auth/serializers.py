@@ -38,9 +38,13 @@ class RegisterSerializer(serializers.ModelSerializer):
             user = User.objects.create_user(
                 username=validated_data["username"],
                 password=validated_data["password"],
-                email=validated_data["email"],
             )
-            user.first_name = validated_data["first_name"]
-            user.last_name = validated_data["last_name"]
+            user.email = validated_data["email"] if "email" in validated_data else ""
+            user.first_name = (
+                validated_data["first_name"] if "first_name" in validated_data else ""
+            )
+            user.last_name = (
+                validated_data["last_name"] if "last_name" in validated_data else ""
+            )
             user.save()
             return user
